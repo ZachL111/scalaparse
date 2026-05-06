@@ -1,68 +1,40 @@
 # scalaparse
 
-`scalaparse` treats parsers as a local verification problem. The Scala implementation is intentionally narrow, but the fixtures and notes make the behavior explicit.
+`scalaparse` is a Scala project in parsers. Its focus is to parse expressions with Pratt binding powers and AST snapshots.
 
-## Scalaparse Checkpoints
+## Why I Keep It Small
 
-Treat the compact fixture as the contract and the extended examples as a scratchpad. The code should stay boring enough that a change in behavior is obvious from the test output.
+I want this repository to be useful as a quick reading exercise: fixtures first, implementation second, verifier last.
 
-## What This Is For
+## Scalaparse Review Notes
 
-I use this kind of project to make a rule visible before adding more machinery around it. The important part here is not the size of the codebase. It is that the input signals, scoring rule, fixture data, and expected output can all be checked in one sitting.
+For a quick review, compare `error locality` with `token drift` before reading the middle cases.
 
-## Project Layout
+## Included Behavior
 
-- `src`: primary implementation
-- `tests`: verification harness
-- `fixtures`: compact golden scenarios
-- `examples`: expanded scenario set
-- `metadata`: project constants and verification metadata
-- `docs`: operations and extension notes
-- `scripts`: local verification and audit commands
+- `fixtures/domain_review.csv` adds cases for token drift and grammar width.
+- `metadata/domain-review.json` records the same cases in structured form.
+- `config/review-profile.json` captures the read order and the two review questions.
+- `examples/scalaparse-walkthrough.md` walks through the case spread.
+- The Scala code includes a review path for `error locality` and `token drift`.
+- `docs/field-notes.md` explains the strongest and weakest cases.
 
-## Useful Pieces
+## Internal Model
 
-- Includes extended examples for grammar boundaries, including `surge` and `degraded`.
-- Documents golden examples tradeoffs in `docs/operations.md`.
-- Runs locally with a single verification command and no external credentials.
-- Stores project constants and verification metadata in `metadata/project.json`.
-- Adds a repository audit script that checks structure before running the language verifier.
+The core code exposes a scoring path and the added review layer uses `signal`, `slack`, `drag`, and `confidence`. The domain terms are `token drift`, `grammar width`, `label quality`, and `error locality`.
 
-## Architecture Notes
+The Scala addition stays small enough to inspect in one sitting.
 
-The design is intentionally direct: parse or construct a signal, score it, classify it, and verify the expected branch. This makes the repository useful for studying parsers behavior without needing a service or database unless the language project itself is SQL. The Scala code uses case classes and a compact object API to keep the test path direct.
-
-## Tooling
-
-The only required setup is the local Scala toolchain. After cloning, stay in the repo root so fixture paths resolve correctly.
-
-## Case Study
-
-`boundary` is the first example I would inspect because it lands on the `review` path with a score of 118. The broader file also keeps `degraded` at -42 and `surge` at 242, which gives the model a useful low-to-high spread.
-
-## Local Workflow
+## Try It Locally
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-This runs the language-level build or test path against the compact fixture set.
+## Validation
 
-## Quality Gate
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
-```
-
-The audit command checks repository structure and README constraints before it delegates to the verifier.
-
-## Expansion Ideas
-
-- Add malformed input fixtures so the failure path is as visible as the happy path.
-- Split the scoring constants into a typed configuration object and validate it before use.
-- Add a comparison mode that shows how decisions change when one signal is adjusted.
-- Add one more parsers fixture that focuses on a malformed or borderline input.
+The same command runs the local verification path. The highest-scoring domain case is `recovery` at 224, which lands in `ship`. The most cautious case is `stale` at 144, which lands in `ship`.
 
 ## Scope
 
-This code is local-first. It makes no claim about deployed usage and avoids credentials, hosted state, and environment-specific setup.
+No external service is required. A deeper version would add more negative cases and a clearer boundary around invalid input.

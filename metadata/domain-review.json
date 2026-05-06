@@ -1,0 +1,73 @@
+{
+  "repo": "scalaparse",
+  "language": "Scala",
+  "category": "Parsers",
+  "goal": "Parse expressions with Pratt binding powers and AST snapshots.",
+  "review_model": {
+    "terms": [
+      "token drift",
+      "grammar width",
+      "label quality",
+      "error locality"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "token drift",
+      "signal": 71,
+      "slack": 31,
+      "drag": 23,
+      "confidence": 80,
+      "score": 184,
+      "lane": "ship"
+    },
+    {
+      "name": "stress",
+      "focus": "grammar width",
+      "signal": 67,
+      "slack": 22,
+      "drag": 29,
+      "confidence": 91,
+      "score": 160,
+      "lane": "ship"
+    },
+    {
+      "name": "edge",
+      "focus": "label quality",
+      "signal": 54,
+      "slack": 50,
+      "drag": 19,
+      "confidence": 56,
+      "score": 157,
+      "lane": "ship"
+    },
+    {
+      "name": "recovery",
+      "focus": "error locality",
+      "signal": 85,
+      "slack": 26,
+      "drag": 19,
+      "confidence": 85,
+      "score": 224,
+      "lane": "ship"
+    },
+    {
+      "name": "stale",
+      "focus": "token drift",
+      "signal": 56,
+      "slack": 22,
+      "drag": 19,
+      "confidence": 67,
+      "score": 144,
+      "lane": "ship"
+    }
+  ]
+}
